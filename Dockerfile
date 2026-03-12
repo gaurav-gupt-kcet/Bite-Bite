@@ -2,21 +2,35 @@ FROM php:8.2-cli
 
 WORKDIR /app
 
-COPY . /app
+RUN apt-get update && apt-get install -y \
+git \
+unzip \
+curl \
+libzip-dev \
+zip \
+nodejs \
+npm
 
-RUN apt-get update && apt-get install -y git unzip curl
+RUN docker-php-ext-install pdo pdo_mysql zip
+
+COPY . .
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-RUN composer install
+RUN composer install --no-dev --optimize-autoloader
 
-EXPOSE 10000
+RUN npm install
+RUN npm run build
 
-CMD php artisan serve --host=0.0.0.0 --port=10000
-
-RUN php artisan key:generate --force
 RUN php artisan config:clear
 RUN php artisan config:cache
 RUN php artisan route:cache
 RUN php artisan view:cache
+
 RUN php artisan storage:link || true
+
+RUN chmod -R 775 storage bootstrap/cache
+
+EXPOSE 10000
+
+CMD php artisan serve --host=0.0.0.0 --port=10000
