@@ -24,16 +24,24 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
-
-        $request->session()->regenerate();
-
-        // Redirect based on user type
-        if (Auth::user()->is_admin == '1') {
-            return redirect()->intended('/admin');
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
+        
+        $credentials = $request->only('email', 'password');
+        
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            
+            if (Auth::user()->is_admin == '1') {
+                return redirect('/admin')->with('success', 'Welcome to Admin Panel!');
+            }
+            
+            return redirect('/')->with('success', 'Login successful!');
         }
-
-        return redirect()->intended(route('dashboard', absolute: false));
+        
+        return back()->with('error', 'Invalid email or password')->withInput();
     }
 
     /**
