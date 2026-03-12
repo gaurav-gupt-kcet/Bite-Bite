@@ -13,3 +13,10 @@ RUN composer install
 EXPOSE 10000
 
 CMD php artisan serve --host=0.0.0.0 --port=10000
+
+RUN php artisan key:generate --force
+RUN php artisan config:clear
+RUN php artisan config:cache
+RUN php artisan route:cache
+RUN php artisan view:cache
+RUN php artisan storage:link || true
