@@ -53,3 +53,25 @@ databases:
     databaseName: bitebite
     user: bitebite
     plan: free
+
+
+    services:
+  - type: web
+    name: bitebite
+    env: docker
+    plan: free
+    branch: main
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_KEY
+        generateValue: true
+
+databases:
+  - name: bitebite-db
+    databaseName: bitebite
+    user: bitebite
+    plan: free
