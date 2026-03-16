@@ -7,7 +7,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Default Database Connection Name
+    | Default Database Connection
     |--------------------------------------------------------------------------
     */
 
@@ -50,8 +50,9 @@ return [
             'driver' => 'pgsql',
 
             /*
-            | IMPORTANT: Render DATABASE_URL support
+            | Render DATABASE_URL support
             */
+
             'url' => env('DATABASE_URL'),
 
             'host' => env('DB_HOST', '127.0.0.1'),
@@ -59,6 +60,7 @@ return [
             'database' => env('DB_DATABASE', 'laravel'),
             'username' => env('DB_USERNAME', 'postgres'),
             'password' => env('DB_PASSWORD', ''),
+
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
@@ -103,7 +105,10 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug((string) env('APP_NAME', 'laravel')).'-database-'),
+            'prefix' => env(
+                'REDIS_PREFIX',
+                Str::slug((string) env('APP_NAME', 'laravel')).'-database-'
+            ),
         ],
 
         'default' => [
@@ -127,4 +132,3 @@ return [
     ],
 
 ];
-```
